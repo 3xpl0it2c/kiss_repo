@@ -1,0 +1,20 @@
+#!/bin/sh -e
+
+# Could be: selinux apparmor nokmem seccomp
+BUILDTAGS="seccomp"
+export GOPATH="$PWD/go"
+export GO111MODULE=on
+# The KISS docs say to do so, please look at the wiki guidelines.
+export EXTRA_FLAGS=" -modcacherw -trimpath "
+
+# The latest commit is used in compile time, this patch removes the need for it.
+patch -p1 < no_git.patch 
+
+make vendor
+
+make \
+	BUILDTAGS="${BUILDTAGS}" \
+	DESTDIR=$1 \
+	"${MAKEOPTS:-"-j5"}"
+
+make DESTDIR=$1 install

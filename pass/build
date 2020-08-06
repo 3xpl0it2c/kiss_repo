@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+# I have 8 cores so I use 5 in order to gain Turbo Boost.
+make CC="${CC:-cc}" -j5
+
+make DESTDIR=$1 install

@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+./configure --prefix=/usr
+
+# Use 5 (out of 8) cores to leverage Intel's Turbo Boost
+make CC="${CC:-cc}" -j5 PREFIX=/usr
+
+make DESTDIR=$1 PREFIX=/usr install

@@ -1,0 +1,6 @@
+fontconfig
+cmake
+make
+libxcb
+pkgconf
+freetype-harfbuzz

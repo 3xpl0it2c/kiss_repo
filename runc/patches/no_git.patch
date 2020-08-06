@@ -1,0 +1,34 @@
+--- runc-1.0.0-rc92/Makefile
++++ runc-1.0.0-rc92/Makefile
+@@ -1,17 +1,13 @@
+ CONTAINER_ENGINE := docker
+ GO := go
+ 
+-PREFIX ?= $(DESTDIR)/usr/local
++PREFIX ?= $(DESTDIR)/usr
+ BINDIR := $(PREFIX)/sbin
+ MANDIR := $(PREFIX)/share/man
+ 
+-GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
+-GIT_BRANCH_CLEAN := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/g")
+-RUNC_IMAGE := runc_dev$(if $(GIT_BRANCH_CLEAN),:$(GIT_BRANCH_CLEAN))
++RUNC_IMAGE := runc_dev
+ PROJECT := github.com/opencontainers/runc
+ BUILDTAGS ?= seccomp selinux apparmor
+-COMMIT_NO := $(shell git rev-parse HEAD 2> /dev/null || true)
+-COMMIT ?= $(if $(shell git status --porcelain --untracked-files=no),"$(COMMIT_NO)-dirty","$(COMMIT_NO)")
+ VERSION := $(shell cat ./VERSION)
+ 
+ # TODO: rm -mod=vendor once go 1.13 is unsupported
+@@ -24,9 +20,9 @@
+ 	endif
+ endif
+ GO_BUILD := $(GO) build $(MOD_VENDOR) $(GO_BUILDMODE) $(EXTRA_FLAGS) -tags "$(BUILDTAGS)" \
+-	-ldflags "-X main.gitCommit=$(COMMIT) -X main.version=$(VERSION) $(EXTRA_LDFLAGS)"
++	-ldflags "-X main.version=$(VERSION) $(EXTRA_LDFLAGS)"
+ GO_BUILD_STATIC := CGO_ENABLED=1 $(GO) build $(MOD_VENDOR) $(EXTRA_FLAGS) -tags "$(BUILDTAGS) netgo osusergo" \
+-	-ldflags "-w -extldflags -static -X main.gitCommit=$(COMMIT) -X main.version=$(VERSION) $(EXTRA_LDFLAGS)"
++	-ldflags "-w -extldflags -static -X main.version=$(VERSION) $(EXTRA_LDFLAGS)"
+ 
+ .DEFAULT: runc
+ 
