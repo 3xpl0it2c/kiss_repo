@@ -1,0 +1,48 @@
+--- cnd/containerd-1.3.7/Makefile
++++ containerd-1.3.7/Makefile
+@@ -17,11 +17,11 @@
+ ROOTDIR=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+ 
+ # Base path used to install.
+-DESTDIR ?= /usr/local
++DESTDIR ?= /usr
+ 
+ # Used to populate variables in version package.
+-VERSION=$(shell git describe --match 'v[0-9]*' --dirty='.m' --always)
+-REVISION=$(shell git rev-parse HEAD)$(shell if ! git diff --no-ext-diff --quiet --exit-code; then echo .m; fi)
++VERSION="v1.3.7"
++REVISION="1.3.7"
+ PACKAGE=github.com/containerd/containerd
+ 
+ ifneq "$(strip $(shell command -v go 2>/dev/null))" ""
+@@ -70,21 +70,7 @@
+ # Project packages.
+ PACKAGES=$(shell go list ./... | grep -v /vendor/)
+ INTEGRATION_PACKAGE=${PKG}
+-TEST_REQUIRES_ROOT_PACKAGES=$(filter \
+-    ${PACKAGES}, \
+-    $(shell \
+-	for f in $$(git grep -l testutil.RequiresRoot | grep -v Makefile); do \
+-		d="$$(dirname $$f)"; \
+-		[ "$$d" = "." ] && echo "${PKG}" && continue; \
+-		echo "${PKG}/$$d"; \
+-	done | sort -u) \
+-    )
+ 
+-ifdef SKIPTESTS
+-    PACKAGES:=$(filter-out ${SKIPTESTS},${PACKAGES})
+-    TEST_REQUIRES_ROOT_PACKAGES:=$(filter-out ${SKIPTESTS},${TEST_REQUIRES_ROOT_PACKAGES})
+-endif
+-
+ # Project binaries.
+ COMMANDS=ctr containerd containerd-stress
+ MANPAGES=ctr.8 containerd.8 containerd-config.8 containerd-config.toml.5
+@@ -93,7 +79,7 @@
+     GO_BUILDTAGS = ${BUILDTAGS}
+ endif
+ # Build tags seccomp and apparmor are needed by CRI plugin.
+-GO_BUILDTAGS ?= seccomp apparmor
++GO_BUILDTAGS ?= seccomp 
+ GO_BUILDTAGS += ${DEBUG_TAGS}
+ GO_TAGS=$(if $(GO_BUILDTAGS),-tags "$(GO_BUILDTAGS)",)
+ GO_LDFLAGS=-ldflags '-X $(PKG)/version.Version=$(VERSION) -X $(PKG)/version.Revision=$(REVISION) -X $(PKG)/version.Package=$(PACKAGE) $(EXTRA_LDFLAGS)'

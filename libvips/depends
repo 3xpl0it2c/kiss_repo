@@ -1,0 +1,16 @@
+bzip2
+expat
+fontconfig
+freetype-harfbuzz
+fribidi
+glib
+lcms
+libexif
+libffi
+libjpeg-turbo
+libpng
+libwebp
+pango
+tiff
+xz
+zlib

@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+./autogen --prefix=/usr
+
+make $MAKEFLAGS
+
+make install DESTDIR=$1

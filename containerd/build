@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+export GOPATH="$PWD/go"
+export GO111MODULE=on
+# There is no offical btrfs and selinux/apparmor support.
+export BUILDTAGS="no_btrfs no_cri"
+export GO_BUILDFLAGS="-modcacherw -trimpath"
+
+patch -p1 < no_git.patch
+
+make $MAKEFLAGS DESTDIR=$1
+
+make DESTDIR=$1 install
