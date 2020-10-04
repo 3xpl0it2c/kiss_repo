@@ -8,6 +8,8 @@ export GO_BUILDFLAGS="-modcacherw -trimpath"
 
 patch -p1 < no_git.patch
 
+go get github.com/containerd/containerd
+
 make $MAKEFLAGS DESTDIR=$1
 
 make DESTDIR=$1 install

@@ -1,0 +1,18 @@
+#!/bin/sh -e
+
+./configure \
+	--prefix=/usr \
+	--sbin-path=/usr/sbin/nginx \
+	--conf-path=/etc/nginx/ \
+	--with-http_ssl_module \
+	--with-stream \
+	--with-http_v2_module \
+	--with-threads \
+	--lock-path=/var/lock/nginx/ \
+	--with-http_gunzip_module \
+	--with-cc="${CC:-cc}" \
+	--with-cc-opt="${CFLAGS:-""}"
+
+make $MAKEFLAGS
+
+make install DESTDIR=$1

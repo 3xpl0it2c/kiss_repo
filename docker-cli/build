@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+export DISABLE_WARN_OUTSIDE_CONTAINER=1
+# We might just set this to "linux", but this is more portable.
+export GOOS="$(go env GOHOSTOS)"
+
+make $MAKEFLAGS binary
+
+make install PREFIX=/usr DESTDIR=$1
